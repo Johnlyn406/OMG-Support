@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   description:
     "A mobile-first emotional support tracker with nurturing prompts and on-device reflection logs.",
   applicationName: "OMG! Support",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

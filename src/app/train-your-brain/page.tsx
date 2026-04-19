@@ -17,13 +17,7 @@ type LogEntry = {
   id: string;
   date: string;
   time: string;
-  tile: string;
-  entryTitle: string;
-  entryNumber: number;
-  outcomeDoSomethingDifferent: string;
-  notes: string;
-  moodBefore: string;
-  moodAfter: string;
+  observation: string;
 };
 
 const cardStyles: Record<
@@ -79,7 +73,7 @@ const cardStyles: Record<
   },
 };
 
-const tileName = "Train your Brain";
+const tileName = "Train Your Brain";
 const storageKey = "omg-support-logbook";
 
 const suggestions: Suggestion[] = [
@@ -95,8 +89,8 @@ const suggestions: Suggestion[] = [
   },
   {
     id: 5,
-    title: "Scent memory",
-    body: "Imagine you can smell something. Like an orange or a rose that will be soothing.",
+    title: "Smell something",
+    body: "Find a smell that feels good right now. Orange. Coffee. Rose",
   },
   {
     id: 4,
@@ -126,17 +120,14 @@ const suggestions: Suggestion[] = [
   {
     id: 1,
     title: "Nymph energy",
-    body: "Nymph energy of encouragement and playfulness...ie. I messed up!!! Yeah but did you see how good you did that other thing?",
+    body: "Wiggle your butt. Seriously. You'll loosen it up.",
   },
 ];
 
 const emptyForm = {
   date: "",
   time: "",
-  outcomeDoSomethingDifferent: "",
-  notes: "",
-  moodBefore: "",
-  moodAfter: "",
+  observation: "",
 };
 
 function formatDateForInput(date: Date) {
@@ -173,14 +164,6 @@ function getStoredEntries() {
     window.localStorage.removeItem(storageKey);
     return [];
   }
-}
-
-function escapeCsvValue(value: string | number) {
-  const text = String(value ?? "");
-  if (text.includes(",") || text.includes("\"") || text.includes("\n")) {
-    return `"${text.replaceAll("\"", "\"\"")}"`;
-  }
-  return text;
 }
 
 function randomSuggestionId() {
@@ -299,62 +282,13 @@ export default function TrainYourBrainPage() {
       id: `${Date.now()}`,
       date: form.date,
       time: form.time,
-      tile: tileName,
-      entryTitle: selectedSuggestion.title,
-      entryNumber: selectedSuggestion.id,
-      outcomeDoSomethingDifferent: form.outcomeDoSomethingDifferent.trim(),
-      notes: form.notes.trim(),
-      moodBefore: form.moodBefore.trim(),
-      moodAfter: form.moodAfter.trim(),
+      observation: form.observation.trim(),
     };
 
     const nextEntries = [entry, ...logEntries];
     setLogEntries(nextEntries);
     window.localStorage.setItem(storageKey, JSON.stringify(nextEntries));
     setForm(createInitialForm());
-  };
-
-  const handleExportCsv = () => {
-    if (!logEntries.length) {
-      return;
-    }
-
-    const rows = [
-      [
-        "date",
-        "time",
-        "tile",
-        "entry_title",
-        "entry_number",
-        "outcome_do_something_different",
-        "notes",
-        "mood_before",
-        "mood_after",
-      ],
-      ...logEntries.map((entry) => [
-        entry.date,
-        entry.time,
-        entry.tile,
-        entry.entryTitle,
-        entry.entryNumber,
-        entry.outcomeDoSomethingDifferent,
-        entry.notes,
-        entry.moodBefore,
-        entry.moodAfter,
-      ]),
-    ];
-
-    const csv = rows
-      .map((row) => row.map((value) => escapeCsvValue(value)).join(","))
-      .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "omg-support.csv";
-    link.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -379,7 +313,7 @@ export default function TrainYourBrainPage() {
               {tileName}
             </h1>
             <p className="mt-4 max-w-2xl font-['Quicksand',sans-serif] text-lg leading-8 text-[#314d67]">
-              try the suggestion on the number below or pick the one that feels nurturing:
+              No need to think. Pick one and do it. Or let the Universe pick for you.
             </p>
 
             <div className="mt-6 rounded-[1.75rem] bg-[linear-gradient(135deg,#FFF0E8_0%,#FFFFFF_100%)] p-5 shadow-[inset_0_0_0_1px_rgba(225,113,54,0.08)]">
@@ -487,13 +421,13 @@ export default function TrainYourBrainPage() {
           <div className="flex flex-col gap-6">
             <section className="rounded-[2rem] border border-white/80 bg-white/82 p-6 shadow-[0_22px_70px_rgba(0,30,75,0.12)]">
               <p className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.3em] text-[#00749A]">
-                Log the outcome
+                Neutral observation helps things shift FOR you
               </p>
               <h2 className="mt-3 font-['Oxygen',sans-serif] text-3xl text-[#001E4B]">
-                Record what happened after doing something different.
+                NOTICE
               </h2>
               <p className="mt-3 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
-                Your selected number is currently <strong>{selectedSuggestion.id}</strong>.
+                What do you notice? Notice it don&apos;t fix it.
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -529,105 +463,43 @@ export default function TrainYourBrainPage() {
                 </div>
 
                 <label className="block">
-                    <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
-                      Outcome of doing something different
-                    </span>
+                  <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
+                    Notice
+                  </span>
                   <textarea
                     required
-                    rows={4}
-                    value={form.outcomeDoSomethingDifferent}
+                    rows={6}
+                    value={form.observation}
                     onChange={(event) =>
                       setForm((current) => ({
                         ...current,
-                        outcomeDoSomethingDifferent: event.target.value,
+                        observation: event.target.value,
                       }))
                     }
                     className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                    placeholder="What shifted after doing something different?"
+                    placeholder="Write what you notice here..."
                   />
                 </label>
-
-                <label className="block">
-                  <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
-                    Notes
-                  </span>
-                  <textarea
-                    rows={3}
-                    value={form.notes}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, notes: event.target.value }))
-                    }
-                    className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                    placeholder="Anything else you want to remember?"
-                  />
-                </label>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
-                      Mood before
-                    </span>
-                    <input
-                      value={form.moodBefore}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          moodBefore: event.target.value,
-                        }))
-                      }
-                      className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                      placeholder="How were you feeling?"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
-                      Mood after
-                    </span>
-                    <input
-                      value={form.moodAfter}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          moodAfter: event.target.value,
-                        }))
-                      }
-                      className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                      placeholder="How do you feel now?"
-                    />
-                  </label>
-                </div>
 
                 <button
                   type="submit"
                   className="inline-flex w-full items-center justify-center rounded-full bg-[#001E4B] px-5 py-3 font-['Lato',sans-serif] text-sm font-semibold text-white shadow-[0_16px_30px_rgba(0,30,75,0.28)] transition hover:bg-[#092d63]"
                 >
-                  Save to this device
+                  Save observation
                 </button>
               </form>
             </section>
 
             <section className="rounded-[2rem] border border-white/80 bg-white/82 p-6 shadow-[0_22px_70px_rgba(0,30,75,0.12)]">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.3em] text-[#00749A]">
-                    Export + recent entries
-                  </p>
-                  <h2 className="mt-3 font-['Oxygen',sans-serif] text-3xl text-[#001E4B]">
-                    Keep it portable.
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  disabled={!logEntries.length}
-                  onClick={handleExportCsv}
-                  className="inline-flex items-center justify-center rounded-full bg-[#CDEECF] px-4 py-2 font-['Lato',sans-serif] text-sm font-semibold text-[#005341] transition disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Export CSV
-                </button>
-              </div>
+              <p className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.3em] text-[#00749A]">
+                Recent Observation
+              </p>
+              <h2 className="mt-3 font-['Oxygen',sans-serif] text-3xl text-[#001E4B]">
+                Take a screenshot and send it to Johnlyn
+              </h2>
 
               <p className="mt-3 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
-                Download your entries.
+                Keep your latest notices here so you can see what has been coming up.
               </p>
 
               <div className="mt-5 space-y-3">
@@ -638,26 +510,19 @@ export default function TrainYourBrainPage() {
                       className="rounded-[1.4rem] bg-[#FDF9F7] px-4 py-4 shadow-[inset_0_0_0_1px_rgba(231,219,213,0.8)]"
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-['Oxygen',sans-serif] text-lg text-[#001E4B]">
-                          #{entry.entryNumber} {entry.entryTitle}
-                        </p>
+                        <p className="font-['Oxygen',sans-serif] text-lg text-[#001E4B]">Notice</p>
                         <span className="rounded-full bg-white px-3 py-1 font-['Lato',sans-serif] text-xs uppercase tracking-[0.16em] text-[#00749A]">
                           {entry.date} {entry.time}
                         </span>
                       </div>
                       <p className="mt-3 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
-                        {entry.outcomeDoSomethingDifferent}
+                        {entry.observation}
                       </p>
-                      {entry.notes ? (
-                        <p className="mt-2 font-['Quicksand',sans-serif] text-sm leading-6 text-[#5d6d81]">
-                          Notes: {entry.notes}
-                        </p>
-                      ) : null}
                     </article>
                   ))
                 ) : (
                   <p className="rounded-[1.4rem] bg-[#F5F0EE] px-4 py-4 font-['Quicksand',sans-serif] text-[#5d6d81]">
-                    No entries yet. Save the first one and it will appear here.
+                    No observations yet. Save the first one and it will appear here.
                   </p>
                 )}
               </div>

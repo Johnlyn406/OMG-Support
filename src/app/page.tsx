@@ -10,10 +10,9 @@ const tiles = [
     available: false,
   },
   {
-    title: "Train your Brain",
+    title: "Train Your Brain",
     subtitle: "Compassion not judgment",
-    description:
-      "Choose a nurturing suggestion, do something different, and record what shifted.",
+    description: "Choose something different. Get something different.",
     accent: "from-[#E17136] to-[#DB472F]",
     available: true,
     href: "/train-your-brain",
@@ -94,11 +93,14 @@ export default function Home() {
                 OMG! Support
               </p>
               <h1 className="mt-3 font-['Oxygen',sans-serif] text-4xl leading-tight text-[#001E4B] sm:text-5xl">
-                Choose the support that meets you where you are.
+                <span className="block">You could feel peaceful. Clear.</span>
+                <span className="block text-[#00749A]">
+                  Excited... maybe even invincible.
+                </span>
               </h1>
               <p className="mt-4 max-w-xl font-['Quicksand',sans-serif] text-lg leading-8 text-[#26435e]">
-                Designed for those moments when something feels slightly off and
-                you want a gentle next step on your phone.
+                Choose the support you need to get back to feeling that way and
+                focus on the things that actually matter to you.
               </p>
             </div>
           </div>
@@ -129,7 +131,7 @@ export default function Home() {
                   </p>
                   <div className="mt-6 flex items-center justify-between gap-3">
                     <span className="inline-flex items-center rounded-full bg-[#FFF0E8] px-4 py-2 font-['Lato',sans-serif] text-sm font-semibold text-[#DB472F]">
-                      Open tile
+                      Feel better now
                     </span>
                     <span
                       aria-hidden="true"
