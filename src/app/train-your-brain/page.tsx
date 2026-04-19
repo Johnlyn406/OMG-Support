@@ -253,6 +253,36 @@ function SoftIcon({ type }: { type: Suggestion["id"] }) {
   }
 }
 
+function FieldIcon({ type }: { type: "date" | "time" }) {
+  const commonProps = {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    className: "h-5 w-5",
+  };
+
+  if (type === "date") {
+    return (
+      <svg {...commonProps}>
+        <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" />
+        <path d="M7.5 3.5v4" />
+        <path d="M16.5 3.5v4" />
+        <path d="M3.5 9.5h17" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...commonProps}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5v5l3 1.8" />
+    </svg>
+  );
+}
+
 export default function TrainYourBrainPage() {
   const [selectedId, setSelectedId] = useState<number>(randomSuggestionId());
   const [form, setForm] = useState(createInitialForm);
@@ -436,29 +466,39 @@ export default function TrainYourBrainPage() {
                     <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
                       Date
                     </span>
-                    <input
-                      required
-                      type="date"
-                      value={form.date}
-                      onChange={(event) =>
-                        setForm((current) => ({ ...current, date: event.target.value }))
-                      }
-                      className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                    />
+                    <div className="relative mt-2">
+                      <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-[#00749A]">
+                        <FieldIcon type="date" />
+                      </div>
+                      <input
+                        required
+                        type="date"
+                        value={form.date}
+                        onChange={(event) =>
+                          setForm((current) => ({ ...current, date: event.target.value }))
+                        }
+                        className="w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-12 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
+                      />
+                    </div>
                   </label>
                   <label className="block">
                     <span className="font-['Lato',sans-serif] text-xs uppercase tracking-[0.22em] text-[#5C2F67]">
                       Time
                     </span>
-                    <input
-                      required
-                      type="time"
-                      value={form.time}
-                      onChange={(event) =>
-                        setForm((current) => ({ ...current, time: event.target.value }))
-                      }
-                      className="mt-2 w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-4 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
-                    />
+                    <div className="relative mt-2">
+                      <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-[#00749A]">
+                        <FieldIcon type="time" />
+                      </div>
+                      <input
+                        required
+                        type="time"
+                        value={form.time}
+                        onChange={(event) =>
+                          setForm((current) => ({ ...current, time: event.target.value }))
+                        }
+                        className="w-full rounded-[1.1rem] border border-[#E7DBD5] bg-[#FDF9F7] px-12 py-3 font-['Quicksand',sans-serif] outline-none transition focus:border-[#DB472F]"
+                      />
+                    </div>
                   </label>
                 </div>
 
