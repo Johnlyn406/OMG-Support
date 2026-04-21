@@ -292,14 +292,7 @@ export default function TrainYourBrainPage() {
     () => suggestions.find((suggestion) => suggestion.id === selectedId) ?? suggestions[0],
     [selectedId],
   );
-  const leftColumnSuggestions = useMemo(
-    () => suggestions.filter((_, index) => index % 2 === 0),
-    [],
-  );
-  const rightColumnSuggestions = useMemo(
-    () => suggestions.filter((_, index) => index % 2 === 1),
-    [],
-  );
+  const orderedSuggestions = useMemo(() => suggestions, []);
 
   const handleChooseForMe = () => {
     setSelectedId(randomSuggestionId());
@@ -380,10 +373,8 @@ export default function TrainYourBrainPage() {
               </div>
             </div>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {[leftColumnSuggestions, rightColumnSuggestions].map((column, columnIndex) => (
-                <div key={columnIndex} className="flex flex-col gap-4">
-                  {column.map((suggestion) => {
+            <div className="mt-6 flex flex-col gap-4">
+              {orderedSuggestions.map((suggestion) => {
                 const isActive = suggestion.id === selectedId;
                 const style = cardStyles[suggestion.id];
 
@@ -442,9 +433,7 @@ export default function TrainYourBrainPage() {
                     </div>
                   </button>
                 );
-                  })}
-                </div>
-              ))}
+              })}
             </div>
           </div>
 
@@ -458,6 +447,9 @@ export default function TrainYourBrainPage() {
               </h2>
               <p className="mt-3 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
                 What do you notice? Notice it don&apos;t fix it.
+              </p>
+              <p className="mt-2 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
+                Better. Worse. Same. It&apos;s all information.
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
