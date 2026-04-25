@@ -531,7 +531,7 @@ export default function TrainYourBrainPage() {
               </h2>
 
               <p className="mt-3 font-['Quicksand',sans-serif] text-base leading-7 text-[#42556d]">
-                Keep your latest notices here so you can see what has been coming up.
+                What patterns are you noticing? Bring that information to your next session.
               </p>
 
               <div className="mt-5 space-y-3">
